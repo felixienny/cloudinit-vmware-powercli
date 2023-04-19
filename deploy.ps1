@@ -77,13 +77,8 @@ function SetCloudImgData {
     SetGuestInfoParam -VM $vm -Name "guestinfo.userdata" -Value $UserDataEncoded
 }
 
-if (-not ($Env:VIUser)) {
-    Write-Host "Please set the VIUser environment variable."
-    Exit
-}
-
-if (-not ($Env:VIPassword)) {
-    Write-Host "Please set the VIPassword environment variable."
+if (-not ($Env:VICredentials)) {
+    Write-Host "Please set the VICredentials environment variable."
     Exit
 }
 
@@ -94,7 +89,7 @@ if (-not (Test-Path -Type Folder -Path $($PWD)\$($VM))) {
 
 # Connect to vCenter
 Write-Host "Connecting to $Server"
-Connect-VIServer -Server $Server -User $Env:VIUser -Password $Env:VIPassword -Force 
+Connect-VIServer -Server $Server -Force 
 
 # Create VM
 Write-Host "Creating VM $Name"

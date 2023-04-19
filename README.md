@@ -66,12 +66,11 @@ This file contains information on more ephemeral specifications, it enables auto
 - Timezone / Locale
 - Mirror Selection
 
-### Set environnement variables
+### Set credentials
 
-You will have to set to environment variables : $Env:VIUser and $Env:VIPassword.
+You will have to set VICredentials environment variable.
 
-    $Env:VIUser="test"
-    $Env:VIPassword="test"
+    $Env:VICredentials=Get-Credential
 
 ### Run script
 
