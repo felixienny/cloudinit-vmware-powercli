@@ -1,0 +1,19 @@
+instance-id: example.test.local
+local-hostname: example.test.local
+network:
+  version: 2
+  ethernets:
+    ens192:
+      addresses: 
+        - 10.2.2.176/24
+      nameservers:
+        search: 
+          - test.local
+        addresses: 
+          - 10.0.51.1
+          - 10.0.51.2
+          - 10.0.51.3
+      routes:
+        - to: default
+          via: 10.2.2.254
+  

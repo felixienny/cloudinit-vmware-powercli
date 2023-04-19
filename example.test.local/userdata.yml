@@ -1,0 +1,46 @@
+#cloud-config
+locale: en_US
+timezone: Europe/Paris
+keyboard: 
+  layout: fr # Fix keyboard layout to french
+
+# Update the apt package index and install packages 
+package_update: true
+package_upgrade: true
+packages:
+  - apt-transport-https
+  - ca-certificates
+  - curl
+
+
+write_files:
+# Enable some module at startup for containerd
+ - path: /etc/modules-load.d/containerd.conf
+   content: |
+    overlay 
+    br_netfilter
+ - path: /etc/hosts
+   content: |
+    10.8.2.101    k8s-master1
+    10.8.2.102    k8s-master2
+    10.8.2.103    k8s-master3
+    10.8.2.201    k8s-worker1
+    10.8.2.202    k8s-worker2
+    10.8.2.203    k8s-worker3
+   append: true
+
+runcmd:
+ - modprobe overlay # Load overlay module.
+ - modprobe br_netfilter # Load br_netfilter module.
+
+ 
+users:
+# Create on user for the SSH access
+  - name: fienny
+    groups: [ sudo ]
+    shell: /bin/bash
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']
+    passwd: "$6$kW4vfBM9kGgq4hr$TFtHW7.3jOECR9UCBuw9NrdSMJETzSVoNQGcVv2y.RqRUzWDEtYhYRkGvIpB6ml1fh/fZEVIgKbSXI9L1B6xF."
+    lock-passwd: false
+    ssh_authorized_keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDQbs78vvjfkcvkfPywGvqHfH97e7H8SofXbkkYIxwnl0PgQpTCDoAzZBTL/HGk6HlvK5k9Ro3ukY/wuKGyrSzyZ5vCtoibG60Kin2LynUYP+X7GUp/vSLnPjKjKBAVWRZ0MTXAuNNvS6xOSGlPv/2XxK2Gl03uaVTY3cC48jZxp+3eZfcd2RhsD+5r4xKZ16LGZCGJFxnWhY7QgZAlZaOKuvG6FU4rzdduzkGwhRhSwgLzR4cYLttUDoB2IOmjSmNF+RiCkFX4fBo6OO6qhFC5rIxF3LK6LVghozbM99NMcTi7bDEEoVotvZjuZ5x7VTU/LS1xV+QwBB/8dQ9650G6pj+oApJOI9SByppscUkvOdcuEH+Gj7tKJPB2dC54DFdIUAKcLP9mV5mEiVkg3zWA39RBaJfnwBKE8kn68rEf4Ow5tw3Bh9hBazoBrv0B3U4a2UBbQDd94wUQSN3wvK51Qi23MOXk5+YSCa/Gx4EtoQuk1hq+bFnTGTnD3PLzwSS2a6kyQ7rK/6WrqU6Ck+cpfLLj8e1j0MsrE6HjIHcxcH1GLN7c5UzzGMQbxBRDJh4COhuG589OpOe+zZYNiROdXKYxYVpysK0So4Dgmp/jkQ63kxsJAUkCxGKsu+PHnIWIvNqQvGVGFtdxr9B0DM4xnjKfe/wjAHly1w== Felix@FELIX-PC
